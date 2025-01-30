@@ -35,6 +35,7 @@ app.prepare().then(() => {
       methods: ["GET", "POST"],
       credentials: true, // Allow cookies or credentials (JWT, etc.)
     },
+    transports: ["websocket"],
   });
   io.on("connection", (socket) => {
     socketHandler(socket, io);
