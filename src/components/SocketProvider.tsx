@@ -16,7 +16,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     // const socketInstance = io("http://localhost:3005");  for different server websocket url
-    const socketInstance = io("https://super-kitsune-003168.netlify.app");
+    const socketInstance = io();
     console.log(process.env.SOCKET_URL, "SOCKET URL");
 
     setSocket(socketInstance);
