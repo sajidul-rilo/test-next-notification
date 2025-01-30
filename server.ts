@@ -1,7 +1,7 @@
 import { createServer } from "http";
 import { parse } from "url";
 import next from "next";
-import { Server } from "socket.io";
+import { Server as SocketIOServer } from "socket.io";
 import socketHandler from "./src/server/sockets";
 
 const port = parseInt(process.env.PORT || "3000", 10);
@@ -18,10 +18,22 @@ app.prepare().then(() => {
   /**
    * Socket.io server
    */
-  const io = new Server(httpServer, {
+  const allowedOrigins = [
+    "https://super-kitsune-003168.netlify.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:5500",
+  ];
+  const io = new SocketIOServer(httpServer, {
     cors: {
-      origin: "*",
+      origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
       methods: ["GET", "POST"],
+      credentials: true, // Allow cookies or credentials (JWT, etc.)
     },
   });
   io.on("connection", (socket) => {
